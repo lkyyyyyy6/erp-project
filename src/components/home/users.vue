@@ -302,6 +302,7 @@ export default {
       // console.log(this.form);
     },
 
+    //分配角色
     async postChara(id,rid){
       let res = await this.$http.put(`users/${id}/role`,{
         id:id,
