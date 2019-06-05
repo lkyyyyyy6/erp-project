@@ -6,6 +6,9 @@ import router from './router'
 import ElementUI from 'element-ui'
 import '../node_modules/element-ui/lib/theme-chalk/index.css'
 Vue.use(ElementUI)
+// 引入element-tree-grid
+import ElTreeGrid from 'element-tree-grid'
+Vue.component(ElTreeGrid.name,ElTreeGrid)
 //引入自己封装的axios插件
 import myaxios from './assets/js/myaxios.js'
 Vue.use(myaxios)

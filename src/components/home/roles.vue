@@ -60,17 +60,17 @@
         <el-row v-for="(item,key) in scope.row.children " :key="key">
           <!-- 第一列 -->
           <el-col :span="6">
-              <el-tag> {{ item.authName }}  </el-tag>
+              <el-tag closable  @close='myclose(scope.row.id,item.id,scope)'> {{ item.authName }}  </el-tag>
           </el-col>
 
           <!-- 第二列 -->
           <el-col :span="18">
             <el-row v-for="(item1,key1) in item.children " :key="key1">
               <el-col :span="6">
-               <el-tag>   {{ item1.authName }} </el-tag>
+               <el-tag closable  @close='myclose(scope.row.id,item1.id,scope)'>   {{ item1.authName }} </el-tag>
               </el-col>
               <el-col :span="18" >
-                <el-tag v-for="(item2,key2) in item1.children " :key="key2">   
+                <el-tag closable @close='myclose(scope.row.id,item2.id,scope)' v-for="(item2,key2) in item1.children " :key="key2">   
                   {{ item2.authName }}
                    </el-tag>
               </el-col>
@@ -86,11 +86,29 @@
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit" plain size="mini"  @click="openEditTable(scope.row.id)"></el-button>
           <el-button type="danger" icon="el-icon-delete" plain size="mini" @click="delChara(scope.row.id)"></el-button>
-          <el-button type="success" icon="el-icon-check" plain size="mini"></el-button>
+          <el-button type="success" icon="el-icon-check" plain size="mini" @click="openQuanxian(scope)"></el-button>
         </template>
       </el-table-column>
     </el-table>
 
+    <!-- 权限分配表单 -->
+  <el-dialog title="权限分配" :visible.sync="quanxianTable">
+    <el-tree
+    :props="props"
+    :default-expand-all='true'
+    :default-checked-keys='checkArr'
+    node-key="id"
+    :data="quanxiandata"
+    show-checkbox
+    ref="tree"
+  >
+</el-tree>
+
+  <div slot="footer" class="dialog-footer">
+    <el-button @click="quanxianTable = false">取 消</el-button>
+    <el-button type="primary" @click="postQuanxian">确 定</el-button>
+  </div>
+</el-dialog>
 
 
   </el-card>
@@ -100,11 +118,35 @@
 export default {
   data() {
     return {
+      props:{
+          label: 'authName',
+      },
       tableData:[
         {roleName:'主管',roleDesc:'负责人'},
         {roleName:'主管',roleDesc:'负责人'},
         {roleName:'主管',roleDesc:'负责人'},
         {roleName:'主管',roleDesc:'负责人'}
+      ],
+      checkArr:[],
+      rid:'',
+      quanxiandata:[
+        {id:1, authName:'一级1',children:[
+          {authName:'二级1-1',children:[
+            {authName:'三级1-1-1'},
+            {authName:'三级1-1-2'},
+            {authName:'三级1-1-3'}
+          ]},
+          {authName:'二级1-2'}],
+          },
+          {id:2, authName:'一级2',children:[
+          {authName:'二级2-1',children:[
+            {authName:'三级2-1-1'},
+            {authName:'三级2-1-2'},
+            {authName:'三级2-1-3'}
+          ]},
+          {authName:'二级2-2'}],
+          }
+
       ],
       form:{
         roleName:'',
@@ -114,6 +156,7 @@ export default {
       formLabelWidth: "120px",
       dialogFormVisible : false,
       editFormVisible: false,
+      quanxianTable:false,
        rules: {
         roleName: [{ required: true, message: "请输入角色名称", trigger: "blur" }],
       },
@@ -176,6 +219,61 @@ export default {
       this.editFormVisible = false
       this.getRoleList()
     },
+
+    //删除角色的权限
+    async myclose(roleId,rightId,scope){
+      let res = await this.$http.delete(`roles/${roleId}/rights/${rightId}`)
+      // console.log(roleId,rightId)
+      scope.row.children = res.data.data
+      
+    },
+
+    //打开编辑权限列表
+    async openQuanxian(scope){
+      this.quanxianTable = true
+      this.checkArr = []  //每次打开都要清空
+      let res = await this.$http.get('rights/tree')
+      
+      this.quanxiandata = res.data.data //讲数据给权限列表
+      this.rid = scope.row.id
+      // console.log( this.quanxiandata)
+      //设置默认的选择，遍历当前行的三级默认选项
+      scope.row.children.forEach(item =>{
+        item.children.forEach(item2 =>{
+          item2.children.forEach(item3 =>{
+            this.checkArr.push(item3.id)
+          })
+        })
+      })
+    },
+
+    //提交权限分配
+     async postQuanxian(){
+      // let checkIDs = this.$refs.tree.getCheckedKeys().concat(this.$refs.tree.getHalfCheckedKeys())
+      let checkIDs = [...this.$refs.tree.getCheckedKeys(),...this.$refs.tree.getHalfCheckedKeys() ]
+      // console.log(checkIDs)
+      let rids = checkIDs.join(',')   //注意转字符串
+      // console.log(rids)
+      console.log(this.rid);
+      let res = await this.$http.post(`roles/${this.rid}/rights`,
+      {
+        roleId:this.rid,
+        rids
+        }
+       
+      )
+      console.log(res)
+      this.$message({
+        type:'success',
+        message:'修改权限成功'
+      })
+      this.getRoleList()
+      this.quanxianTable = false
+    }
+
+
+
+
 
 
 

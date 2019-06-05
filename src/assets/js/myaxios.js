@@ -6,7 +6,7 @@ let myaxios = {}
 
 myaxios.install = function (Vue) {
   axios.defaults.baseURL = 'http://localhost:8888/api/private/v1/'
-  axios.interceptors.request.use(config => {
+  axios.interceptors.request.use(config => {  // 拦截器
     config.headers.common['Authorization'] = localStorage.getItem('token')
     return config
   })

@@ -51,6 +51,7 @@ export default {
                 message: meta.msg,
                 type: "success"
               });
+              console.log('????????????????')
               localStorage.setItem('token',data.token)  //本地存令牌
               this.$router.push('/home')
             } else if (meta.status === 400) {
