@@ -26,7 +26,7 @@ export default {
     height: 100%;
   }
   body{
-    background-color:steelblue;
+    background-color: #B3C0D1;
   }
   
 </style>

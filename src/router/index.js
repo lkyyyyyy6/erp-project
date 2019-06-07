@@ -1,11 +1,19 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '../components/login/login.vue'
-import Home from '../components/home/home.vue'
-import Users from '../components/home/users.vue'
-import Roles from '../components/home/roles.vue'
-import Rights from '../components/home/quanxian.vue'
-import Goods from '../components/home/goods.vue'
+
+// 路由懒加载
+const Login = ()=> import ( '../components/login/login.vue')
+const Home = ()=> import ( '../components/home/home.vue')
+const Users = ()=> import ( '../components/home/users.vue')
+const Roles = ()=> import ( '../components/home/roles.vue')
+const Rights = ()=> import ( '../components/home/quanxian.vue')
+const Categories = ()=> import ( '../components/home/categories.vue')
+const Goods = ()=> import ( '../components/home/goods.vue')
+const Add = ()=> import ( '../components/home/add.vue')
+const Orders = ()=> import ('../components/home/orders.vue')
+const Reports = ()=> import ('../components/home/reports.vue')
+const Params = ()=> import ('../components/home/params.vue')
+
 import { Message } from 'element-ui'
 
 Vue.use(Router)
@@ -21,7 +29,13 @@ const router = new Router({
         { path:'/users',component:Users}, //用户列表
         { path:'/roles',component:Roles}, //角色列表
         { path:'/rights',component:Rights }, //权限列表
-        { path:'/goods',component:Goods }
+        { path:'/categories',component:Categories } ,//商品分类
+        {path:'/goods',component:Goods},//
+        {path:'/add',component:Add },
+        {path:'/orders',component:Orders },
+        {path:'/reports',component:Reports },
+        {path:'/params',component:Params }
+
 
       ]
      }

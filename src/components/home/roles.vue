@@ -228,7 +228,7 @@ export default {
       
     },
 
-    //打开编辑权限列表
+    //打开编辑权限表
     async openQuanxian(scope){
       this.quanxianTable = true
       this.checkArr = []  //每次打开都要清空
@@ -255,13 +255,7 @@ export default {
       let rids = checkIDs.join(',')   //注意转字符串
       // console.log(rids)
       console.log(this.rid);
-      let res = await this.$http.post(`roles/${this.rid}/rights`,
-      {
-        roleId:this.rid,
-        rids
-        }
-       
-      )
+      let res = await this.$http.post(`roles/${this.rid}/rights`,{roleId:this.rid,rids})
       console.log(res)
       this.$message({
         type:'success',
@@ -282,7 +276,7 @@ export default {
     this.getRoleList()
   }
 }
-</script>
+</script scoped>
 
 <style scoped>
  .mytable{

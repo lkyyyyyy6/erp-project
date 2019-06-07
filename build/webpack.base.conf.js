@@ -24,6 +24,9 @@ module.exports = {
   entry: {
     app: './src/main.js'
   },
+  externals: { // 高德地图
+    'AMap':'AMap',  
+    },
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',

@@ -23,14 +23,9 @@
 <script>
 import Aside from '../../layout/aside.vue'
 export default {
-  
   components:{
     Aside
   },
-
-
-
-
   methods:{
     logout(){
         this.$confirm('退出当前账号?', '提示', {
@@ -46,18 +41,15 @@ export default {
       localStorage.removeItem('token')
       this.$router.push('/')
         }) 
-    },
- 
+    }, 
   }
-
-
- 
 }
 
-</script scoped>
+</script>
 
-<style>
+<style scoped>
   img{
+    width: 60px;
     height: 60px;
   }
   .mycon{
@@ -73,15 +65,11 @@ export default {
   .el-aside {
     background-color: #D3DCE6;
     color: #333;
-    text-align: center;
-    line-height: 200px;
   }
   
   .el-main {
     background-color: #E9EEF3;
     color: #333;
-    text-align: center;
-    line-height: 160px;
   }
   
   body > .el-container {

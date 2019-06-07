@@ -12,6 +12,19 @@ Vue.component(ElTreeGrid.name,ElTreeGrid)
 //引入自己封装的axios插件
 import myaxios from './assets/js/myaxios.js'
 Vue.use(myaxios)
+//自己封装的事件过滤器插件
+import myMoment from './assets/js/myMoment.js'
+Vue.use(myMoment)
+
+//富文本框
+import VueQuillEditor from 'vue-quill-editor'
+// require styles
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+
+Vue.use(VueQuillEditor)
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
